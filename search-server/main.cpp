@@ -51,7 +51,7 @@ struct Document {
 
 class SearchServer {
 public:
-    void SetStopWords(const string& text) { //Разбиение строки стоп-слов на вектор
+    void SetStopWords(const string& text) { //Разбиение строки стоп-слов
         for (const string& word : SplitIntoWords(text)) {
             stop_words_.insert(word);
         }
