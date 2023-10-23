@@ -59,11 +59,10 @@ public:
 
     void AddDocument(int document_id, const string& document) { //Добавление документа и вычисление TF
         const auto words = ParseQuery(document);
-        document_count_ += 1;
-        double a = 1.0;
-        double TF = a/words.plus_words.size(); 
+        ++document_count_;
+        double value = 1.0/words.plus_words.size(); 
         for (const string& word : words.plus_words) {
-            word_to_document_freqs_[word][document_id] += TF;
+            word_to_document_freqs_[word][document_id] += value;
         }
     }
 
@@ -120,7 +119,7 @@ private:
     } return query_words;
     }
     
-    double IDF(const string& word) const {
+    double CalculateIDF(const string& word) const {
         return static_cast<double> (log(document_count_ * 1.0 / word_to_document_freqs_.at(word).size()));
     }
     
@@ -130,7 +129,7 @@ private:
         map<int, double> document_to_relevance;
         for (const auto& word : query_words.plus_words) {
             if (word_to_document_freqs_.count(word) != 0) {
-                const double idf = IDF(word);
+                const double idf = CalculateIDF(word);
                 for (const auto& [id, TF] : word_to_document_freqs_.at(word)) {
                   document_to_relevance[id] += TF * idf;
                 }
